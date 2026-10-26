@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/zoemata500-ops/tarjetasIngles/issues"
   },
-  "homepage": "https://github.com/zoemata500-ops/tarjetasIngles#readme"
+  "homepage": "https://github.com/zoemata500-ops/tarjetasIngles#readme",
+  "dependencies": {
+    "express": "^5.3.0"
+  }
 }
