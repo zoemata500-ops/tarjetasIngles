@@ -1,4 +1,5 @@
 const express = require('express');
+const res = require('express/lib/response');
 const app = express();
 const PORT = 3000;
 
@@ -67,3 +68,14 @@ app.get('/definicion/:palabra', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}/definicion/:palabra`);
 });
+
+
+async function traduccionPalabra(palabra, es, en ) {
+  const respuesta = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent (palabra)}&langpair=${es}|${en}`);
+  if (respuesta.ok) {
+    const datosB = await respuesta.json();
+    return console.log(datosB.responseData.translatedText)
+  } 
+
+}
+traduccionPalabra("cancion  ", 'es', 'en' );
