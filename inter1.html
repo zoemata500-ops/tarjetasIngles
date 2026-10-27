@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tarjeta de vocabulario</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="pantalla">
+    <button class="btn-volver" type="button" aria-label="Volver">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+    </button>
+
+    <article class="tarjeta">
+      <!-- Ilustración -->
+      <div class="tarjeta__imagen">
+        <svg viewBox="0 0 160 130" role="img" aria-label="Gráfica que sube">
+          <rect x="34" y="30" width="92" height="64" rx="4" fill="#d9eaf9"/>
+          <line x1="80" y1="30" x2="80" y2="94" stroke="#fff" stroke-width="3"/>
+          <polyline points="50,78 66,60 92,70 118,40" fill="none" stroke="#2fb5a8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          <polygon points="108,34 124,34 124,50" fill="#2fb5a8"/>
+          <circle cx="66" cy="60" r="7" fill="#f0576a"/>
+          <circle cx="92" cy="70" r="7" fill="#5b4fb0"/>
+          <circle cx="50" cy="80" r="7" fill="#f4c93a"/>
+          <path d="M18 96h124l-12 22H30z" fill="#6a5fb5"/>
+        </svg>
+      </div>
+
+      <!-- Palabra en español -->
+      <p class="tarjeta__espanol">mejorar</p>
+
+      <!-- Palabra en inglés + audio -->
+      <h1 class="tarjeta__ingles">
+        <button class="btn-audio" type="button" data-texto="to improve" data-idioma="en" aria-label="Escuchar: to improve"></button>
+        <span><span class="to">to</span> improve</span>
+      </h1>
+
+      <hr class="tarjeta__linea">
+
+      <!-- Ejemplo práctico + audio -->
+      <p class="tarjeta__ejemplo">
+       <button class="btn-audio" type="button" data-texto="to improve" data-idioma="en" aria-label="Escuchar: to improve"></button>
+        <span>I want <strong>to improve</strong> my English skills.</span>
+      </p>
+
+      <!-- Botón del libro: más ejemplos -->
+      <button class="btn-libro" type="button" id="btn-libro" aria-expanded="false" aria-controls="mas-ejemplos" aria-label="Ver más ejemplos"></button>
+
+      <!-- Más ejemplos (oculto hasta pulsar el libro) -->
+      <ul class="mas-ejemplos" id="mas-ejemplos" hidden>
+        <li>
+          <button class="btn-audio" type="button" data-texto="She works every day to improve her health." data-idioma="en" aria-label="Escuchar ejemplo 2">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 8.5a5 5 0 010 7M18.5 6a8.5 8.5 0 010 12" fill="none"/></svg>
+          </button>
+          <span>She works every day <strong>to improve</strong> her health.</span>
+        </li>
+    </article>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

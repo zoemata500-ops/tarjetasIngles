@@ -8,9 +8,9 @@ const PORT = 3000;
 //   { ingles: 'history', traduccion: 'historia', id: 2 },
 //   { ingles: 'how', traduccion: 'cómo', id: 3 }
 // ];
-// const datos = {
-//   error: 'no se encontro la informacion d'
-// }
+const datos = {
+  error: 'no se encontro la informacion d'
+}
 
 // console.log(inicialPalabras.find(numero => numero.id === 1));
 
@@ -69,13 +69,23 @@ app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}/definicion/:palabra`);
 });
 
-
-async function traduccionPalabra(palabra, es, en ) {
-  const respuesta = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent (palabra)}&langpair=${es}|${en}`);
+async function traducir(texto, origen, destino) {
+  const respuesta = await fetch(
+    `https://api.mymemory.translated.net/get?q=${encodeURIComponent(texto)}&langpair=${origen}|${destino}`
+  );
   if (respuesta.ok) {
-    const datosB = await respuesta.json();
-    return console.log(datosB.responseData.translatedText)
-  } 
-
+    const datos = await respuesta.json();
+    return datos.responseData.translatedText;
+  }
+  return null;
 }
-traduccionPalabra("cancion  ", 'es', 'en' );
+
+app.get('/traduccion/:palabra', async (req, res) => {
+  const entrada = req.params.palabra;
+  const traduccion = await traducir(entrada, 'es', 'en');
+  if (traduccion) {
+    res.json({ palabra: entrada, traduccion: traduccion });
+  } else {
+    res.status(502).json({ error: 'No se pudo traducir la palabra' });
+  }
+});

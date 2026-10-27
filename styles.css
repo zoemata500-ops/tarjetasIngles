@@ -1,0 +1,227 @@
+:root {
+  --fondo: #eef3fb;
+  --tarjeta: #ffffff;
+  --texto: #232830;
+  --texto-suave: #6b7280;
+  --turquesa: #3a9fc0;
+  --naranja: #c0702a;
+  --linea: #e6ebf2;
+}
+:root {
+  --icono-audio: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 9v6h4l5 4V5L8 9H4z'/%3E%3Cpath d='M16 8.5a5 5 0 010 7M18.5 6a8.5 8.5 0 010 12' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+
+.btn-audio::before {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-color: currentColor;
+  -webkit-mask: var(--icono-audio) center / contain no-repeat;
+  mask: var(--icono-audio) center / contain no-repeat;
+}
+
+:root {
+  --icono-libro: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 5.5C5.5 4 9 4 12 6c3-2 6.5-2 9-.5V19c-2.5-1.5-6-1.5-9 .5-3-2-6.5-2-9-.5zM12 6v13.5' fill='none' stroke='black' stroke-width='1.8' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+.btn-libro::before {
+  content: "";
+  display: block;
+  width: 26px;
+  height: 26px;
+  margin: auto;
+  background-color: currentColor;
+  -webkit-mask: var(--icono-libro) center / contain no-repeat;
+  mask: var(--icono-libro) center / contain no-repeat;
+}
+
+
+
+
+* { box-sizing: border-box; margin: 0; }
+
+html, body { height: 100%; }
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: var(--texto);
+  background: var(--fondo);
+}
+
+/* ---------- Pantalla (móvil primero) ---------- */
+.pantalla {
+  min-height: 100%;
+  padding: 16px 20px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.btn-volver {
+  align-self: flex-start;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 12px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  color: #aab4c3;
+}
+.btn-volver svg {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ---------- Tarjeta ---------- */
+.tarjeta {
+  width: 100%;
+  max-width: 420px;
+  background: var(--tarjeta);
+  border-radius: 14px;
+  padding: 28px 24px 24px;
+  text-align: center;
+  box-shadow: 0 4px 18px rgba(40, 60, 100, 0.12);
+}
+
+.tarjeta__imagen svg {
+  width: 150px;
+  height: auto;
+  margin: 8px auto 4px;
+  display: block;
+}
+
+.tarjeta__espanol {
+  margin-top: 8px;
+  font-size: 0.95rem;
+  color: var(--texto-suave);
+}
+
+.tarjeta__ingles {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  font-size: 1.7rem;
+  font-weight: 400;
+}
+.tarjeta__ingles .to { color: var(--turquesa); }
+
+.tarjeta__linea {
+  border: 0;
+  border-top: 1px solid var(--linea);
+  margin: 20px 0;
+}
+
+.tarjeta__ejemplo {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  text-align: left;
+}
+.tarjeta__ejemplo strong,
+.mas-ejemplos strong {
+  color: var(--naranja);
+  font-weight: 600;
+}
+
+/* ---------- Botones de icono ---------- */
+.btn-audio {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  padding: 2px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  color: var(--turquesa);
+  border-radius: 6px;
+}
+.btn-audio svg {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+}
+.btn-audio:hover { background: #eaf5fa; }
+
+.btn-libro {
+  display: block;
+  margin: 20px auto 0;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--turquesa);
+  cursor: pointer;
+}
+.btn-libro svg {
+  width: 26px;
+  height: 26px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linejoin: round;
+}
+.btn-libro:hover,
+.btn-libro[aria-expanded="true"] { background: #eaf5fa; }
+
+/* ---------- Más ejemplos ---------- */
+.mas-ejemplos {
+  list-style: none;
+  padding: 0;
+  margin-top: 12px;
+  border-top: 1px solid var(--linea);
+  text-align: left;
+}
+.mas-ejemplos[hidden] { display: none; }
+.mas-ejemplos li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 12px 0;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  border-bottom: 1px solid var(--linea);
+}
+.mas-ejemplos li:last-child { border-bottom: 0; }
+
+/* ---------- Foco visible (teclado) ---------- */
+button:focus-visible {
+  outline: 2px solid var(--turquesa);
+  outline-offset: 2px;
+}
+
+/* ---------- Computadora ---------- */
+@media (min-width: 768px) {
+  .pantalla {
+    justify-content: center;
+    padding: 32px;
+  }
+  .btn-volver {
+    align-self: auto;
+    position: fixed;
+    top: 24px;
+    left: 24px;
+  }
+  .tarjeta {
+    max-width: 460px;
+    padding: 40px 36px 32px;
+  }
+  .tarjeta__imagen svg { width: 180px; }
+  .tarjeta__ingles { font-size: 2rem; }
+  .tarjeta__ejemplo,
+  .mas-ejemplos li { font-size: 1.05rem; }
+}
