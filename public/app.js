@@ -1,21 +1,28 @@
-// ----- Libro: mostrar / ocultar más ejemplos -----
-const btnLibro = document.getElementById("btn-libro");
-const masEjemplos = document.getElementById("mas-ejemplos");
+const botonBuscar = document.getElementById('buscar');
+const campoPalabra = document.getElementById('palabra');
+const spanDefinicion = document.getElementById('definicion');
+const spanTraduccion = document.getElementById('traduccion');
+const spanEjemplo = document.getElementById('ejemplo');
+const spanMensaje = document.getElementById('mensaje');
 
-btnLibro.addEventListener("click", () => {
-  const estaAbierto = btnLibro.getAttribute("aria-expanded") === "true";
-  btnLibro.setAttribute("aria-expanded", String(!estaAbierto));
-  masEjemplos.hidden = estaAbierto;
-});
+botonBuscar.addEventListener('click', async () => {
+  const palabra = campoPalabra.value.trim();
+  if (!palabra) {
+    return;
+  }
 
-// ----- Audio: aquí enchufarás la voz más adelante -----
-function reproducir(texto, idioma) {
-  // Por ahora no hace nada. Después aquí irá la lectura en voz alta.
-  console.log(`Audio pendiente (${idioma}):`, texto);
-}
+  const respuesta = await fetch(`/buscar/${encodeURIComponent(palabra)}`);
 
-document.querySelectorAll(".btn-audio").forEach((boton) => {
-  boton.addEventListener("click", () => {
-    reproducir(boton.dataset.texto, boton.dataset.idioma);
-  });
+  if (!respuesta.ok) {
+    spanMensaje.textContent = "no se encontro la palabra"
+     spanDefinicion.textContent = '';
+    spanTraduccion.textContent = '';
+    return;
+  }
+
+  const datos = await respuesta.json();
+  console.log(datos)
+  spanDefinicion.textContent = datos.definicion;
+  spanTraduccion.textContent = datos.traduccion; 
+  spanEjemplo.textContent = datos.ejemplo || 'Sin ejemplo disponible';
 });

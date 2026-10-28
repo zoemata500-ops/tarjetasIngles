@@ -36,45 +36,27 @@
       <p class="tarjeta__espanol"> 
         <input  type="text" id="palabra" placeholder="Escribe una palabra en inglés">
       </p>
-      <button id="buscar">Buscar</button>
+      <button id="buscar" type="button">Buscar</button>
+      <span id="mensaje"> </span>
 
       <!-- Palabra en inglés + audio -->
       <h1 class="tarjeta__ingles">
         <button class="btn-audio" type="button" data-texto="to improve" data-idioma="en"
           aria-label="Escuchar: to improve"></button>
-        <span class="to">to</span id="traduccion"> improve</span>
+          <span id="traduccion"> </span>
       </h1>
+    
 
       <hr class="tarjeta__linea">
 
       <!-- Ejemplo práctico + audio -->
-      <p class="tarjeta__ejemplo">
-          <p>Definición: <span id="definicion"></span></p>
-          
-        <span>I want <strong>to improve</strong> my English skills.</span>
-      </p>
-
-      <!-- Botón del libro: más ejemplos -->
-      <button class="btn-libro" type="button" id="btn-libro" aria-expanded="false" aria-controls="mas-ejemplos"
-        aria-label="Ver más ejemplos"></button>
-
-      <!-- Más ejemplos (oculto hasta pulsar el libro) -->
-      <ul class="mas-ejemplos" id="mas-ejemplos" hidden>
-        <li>
-          <button class="btn-audio" type="button" data-texto="She works every day to improve her health."
-            data-idioma="en" aria-label="Escuchar ejemplo 2">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M4 9v6h4l5 4V5L8 9H4z" />
-              <path d="M16 8.5a5 5 0 010 7M18.5 6a8.5 8.5 0 010 12" fill="none" />
-            </svg>
-          </button>
-          <span>She works every day <strong>to improve</strong> her health.</span>
-        </li>
+      <div class="tarjeta__ejemplo">
+          <div>Definición: <span id="definicion"></span></div>
+      </div>  
     </article>
   </main>
 
-  <script src="app.js"></script>
-  <script src="servidor.js"></script>
+  <script src="app.js"></script>        
 </body>
 
 </html>
