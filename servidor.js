@@ -53,39 +53,45 @@ const datos = {
 
 
 
-app.get('/definicion/:palabra', async (req, res) => {
-  const palabraBuscada = req.params.palabra;
-  const respuesta = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${palabraBuscada}`);
+async function definir(palabra) {
+  const respuesta = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${palabra}`);
   if (respuesta.ok) {
     const datosB = await respuesta.json();
-    const palabraYdefinicion = { palabra: datosB[0].word, definicion: datosB[0].meanings[0].definitions[0].definition };
-    res.json(palabraYdefinicion);
-  } else {
-    res.status(404).json(datos.error);
-  }
-})
-
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}/definicion/:palabra`);
-});
+    return datosB[0].meanings[0].definitions[0].definition;
+  } else null;
+}
 
 async function traducir(texto, origen, destino) {
   const respuesta = await fetch(
     `https://api.mymemory.translated.net/get?q=${encodeURIComponent(texto)}&langpair=${origen}|${destino}`
   );
   if (respuesta.ok) {
-    const datos = await respuesta.json();
-    return datos.responseData.translatedText;
+    
+      const datos = await respuesta.json();
+      if (datos.quotaFinished || Number(datos.responseStatus) != 200) {
+      return null;
+    } 
+      return datos.responseData.translatedText;
+    
   }
   return null;
 }
 
-app.get('/traduccion/:palabra', async (req, res) => {
+app.get('/buscar/:palabra', async (req, res) => {
   const entrada = req.params.palabra;
   const traduccion = await traducir(entrada, 'es', 'en');
+
+
   if (traduccion) {
-    res.json({ palabra: entrada, traduccion: traduccion });
+    const definicion = await definir(traduccion)
+    res.json({ palabra: entrada, traduccion: traduccion, definicion: definicion });
   } else {
     res.status(502).json({ error: 'No se pudo traducir la palabra' });
+
   }
+});
+
+
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en http://localhost:${PORT}/buscar/:palabra`);
 });
