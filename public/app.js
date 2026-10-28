@@ -15,14 +15,13 @@ botonBuscar.addEventListener('click', async () => {
 
   if (!respuesta.ok) {
     spanMensaje.textContent = "no se encontro la palabra"
-     spanDefinicion.textContent = '';
+    spanDefinicion.textContent = '';
     spanTraduccion.textContent = '';
     return;
   }
 
   const datos = await respuesta.json();
   console.log(datos)
-  spanDefinicion.textContent = datos.definicion;
+  spanDefinicion.textContent = datos.definicion || "sin definicion disponible";
   spanTraduccion.textContent = datos.traduccion; 
-  spanEjemplo.textContent = datos.ejemplo || 'Sin ejemplo disponible';
 });

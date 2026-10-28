@@ -1,26 +1,14 @@
 const express = require('express');
 
-const res = require('express/lib/response');
-
 const app = express();
 const PORT = 3000;
 app.use(express.static('public'));
-
-// const inicialPalabras = [
-//   { ingles: 'hello', traduccion: 'hola', id: 1 },
-//   { ingles: 'history', traduccion: 'historia', id: 2 },
-//   { ingles: 'how', traduccion: 'cómo', id: 3 }
-// ];
-const datos = {
-  error: 'no se encontro la informacion d'
-}
-
 async function definir(palabra) {
   const respuesta = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${palabra}`);
   if (respuesta.ok) {
     const datosB = await respuesta.json();
     return datosB[0].meanings[0].definitions[0].definition;
-  } else null;
+  } else return null;
 }
 
 async function traducir(texto, origen, destino) {
@@ -30,7 +18,7 @@ async function traducir(texto, origen, destino) {
   if (respuesta.ok) {
     
       const datos = await respuesta.json();
-      if (datos.quotaFinished || Number(datos.responseStatus) != 200) {
+      if (datos.quotaFinished || Number(datos.responseStatus) !== 200) {
       return null;
     } 
       return datos.responseData.translatedText;
@@ -55,5 +43,5 @@ app.get('/buscar/:palabra', async (req, res) => {
 
 
 app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}/buscar/:palabra`);
+  console.log(`Servidor corriendo en http://localhost:${PORT}/buscar/`);
 });
