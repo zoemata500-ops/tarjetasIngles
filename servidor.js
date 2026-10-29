@@ -16,7 +16,7 @@ const tarjetas = [];
 let siguienteId = 1;
 
 app.post('/tarjetas', (req, res) => {
-  const { palabra, traduccion, definicion, ejemplo } = req.body || {};
+  const { palabra, traduccion, definicion } = req.body || {};
   if (!palabra || !traduccion) {
     return res.status(400).json({ error: 'La palabra y la traducción son obligatorias' });
   }
@@ -24,8 +24,7 @@ app.post('/tarjetas', (req, res) => {
     id: siguienteId,
     palabra: palabra,
     traduccion: traduccion,
-    definicion: definicion || '',
-    ejemplo: ejemplo || ''
+    definicion: definicion || ''
   };
   siguienteId++;
   tarjetas.push(tarjeta);
@@ -37,19 +36,42 @@ app.get('/tarjetas', (req, res) => {
 });
 
 app.get('/tarjetas/:id', (req, res) => {
-  // Paso 1: leer el id de la URL y convertirlo a número
-  const entrada = req.params.id
-  const numeroId = parseInt(entrada)
-  console.log(numeroId)
-  // Paso 2: buscar la tarjeta con find
+  const entrada = req.params.id;
+  const numeroId = parseInt(entrada);
   const encontrarTarjeta = tarjetas.find((tarjetas) => tarjetas.id === numeroId);
   if (encontrarTarjeta) {
-    res.json(encontrarTarjeta)
-
+    res.json(encontrarTarjeta);
   } else {
-    res.status(404).json({mensaje: "la tarjeta no se encontró"})
+    res.status(404).json({ mensaje: "la tarjeta no se encontró" });
   }
-  // Paso 3: if / else para responder
+
+});
+app.put('/tarjetas/:id', (req, res) => {
+  const entrada = req.params.id;
+  const numeroId = parseInt(entrada);
+  const encontrarTarjeta = tarjetas.find((tarjeta) => tarjeta.id === numeroId);
+  if (!encontrarTarjeta) {
+    res.status(404).json({ error: "no se encontro la tarjeta" })
+    return
+  } else {
+
+
+  
+  const { palabra, traduccion, definicion } = req.body || {};
+  encontrarTarjeta.palabra = palabra;
+  encontrarTarjeta.traduccion = traduccion || {};
+  encontrarTarjeta.definicion = definicion || {};
+  if (encontrarTarjeta.traduccion == ""){
+    res.status(404).json({ error: "se requiere una traducción" })
+    return
+  }
+  res.json(encontrarTarjeta);
+
+
+  }
+  // 6. Cambiar las propiedades de la tarjeta encontrada
+
+  // 7. Responder con la tarjeta actualizada
 });
 
 
