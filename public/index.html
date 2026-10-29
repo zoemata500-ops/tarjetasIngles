@@ -43,7 +43,7 @@
       <h1 class="tarjeta__ingles">
         <button class="btn-audio" type="button" data-texto="to improve" data-idioma="en"
           aria-label="Escuchar: to improve"></button>
-          <span id="traduccion"> </span>
+          <span id="traduccion"></span> <button type = "button" class="btn-editar" data-objetivo="traduccion" id="btn-editar"> Editar </button>
       </h1>
     
 
@@ -51,8 +51,10 @@
 
       <!-- Ejemplo práctico + audio -->
       <div class="tarjeta__ejemplo">
-          <div>Definición: <span id="definicion"></span></div>
+          <div>Definición: <span id="definicion"></span> </span> <button type = "button" class="btn-editar" data-objetivo="definicion" id="btn-editar"> Editar </button></div>
       </div>  
+      <button type="button" id="guardar">Guardar</button>
+      <p id="mensaje"></p>
     </article>
   </main>
 
