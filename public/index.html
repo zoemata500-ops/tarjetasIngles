@@ -9,6 +9,8 @@
 </head>
 
 <body>
+
+
   <main class="pantalla">
     <button class="btn-volver" type="button" aria-label="Volver">
       <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -31,10 +33,18 @@
           <path d="M18 96h124l-12 22H30z" fill="#6a5fb5" />
         </svg>
       </div>
+      
+      <div id="resultado-guardado" hidden>
+        <p>Dirección para tu etiqueta NFC:</p>
+        <input type="text" id="url-tarjeta" readonly>
+        <button type="button" id="copiar">Copiar</button>
+        <a id="abrir-tarjeta" href="#" target="_blank">Abrir tarjeta</a>
+      </div>
 
       <!-- Palabra en español -->
-      <p class="tarjeta__espanol"> 
-        <input  type="text" id="palabra" placeholder="Escribe una palabra en inglés">
+      <p class="tarjeta__espanol">
+        <input type="text" id="palabra" placeholder="Escribe una palabra en inglés">
+
       </p>
       <button id="buscar" type="button">Buscar</button>
       <span id="mensaje"> </span>
@@ -43,22 +53,24 @@
       <h1 class="tarjeta__ingles">
         <button class="btn-audio" type="button" data-texto="to improve" data-idioma="en"
           aria-label="Escuchar: to improve"></button>
-          <span id="traduccion"></span> <button type = "button" class="btn-editar" data-objetivo="traduccion" id="btn-editar"> Editar </button>
+        <span id="traduccion"></span> <button type="button" class="btn-editar" data-objetivo="traduccion"
+          id="btn-editar"> Editar </button>
       </h1>
-    
+
 
       <hr class="tarjeta__linea">
 
       <!-- Ejemplo práctico + audio -->
       <div class="tarjeta__ejemplo">
-          <div>Definición: <span id="definicion"></span> </span> <button type = "button" class="btn-editar" data-objetivo="definicion" id="btn-editar"> Editar </button></div>
-      </div>  
+        <div>Definición: <span id="definicion"></span> </span> <button type="button" class="btn-editar"
+            data-objetivo="definicion" id="btn-editar"> Editar </button></div>
+      </div>
       <button type="button" id="guardar">Guardar</button>
       <p id="mensaje"></p>
     </article>
   </main>
 
-  <script src="app.js"></script>        
+  <script src="app.js"></script>
 </body>
 
 </html>

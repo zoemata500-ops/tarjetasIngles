@@ -17,6 +17,10 @@ async function mostrarTarjeta() {
   spanPalabra.textContent = tarjeta.palabra || 'Sin palabra';
   spanTraduccion.textContent = tarjeta.traduccion || 'Sin traducción';
   spanDefinicion.textContent = tarjeta.definicion || 'Sin definición disponible';
+  
+  botonBocina.addEventListener('click', () => {
+  hablar(spanTraduccion.textContent, 3);
+});
 }
 
 // --- INICIO código Devin ---
@@ -41,9 +45,7 @@ function hablar(texto, veces) {
   }
 }
 
-botonBocina.addEventListener('click', () => {
-  hablar(spanTraduccion.textContent, 1);
-});
+
 // --- FIN código Devin ---
 
 mostrarTarjeta();

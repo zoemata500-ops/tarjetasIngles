@@ -3,19 +3,24 @@ const campoPalabra = document.getElementById('palabra');
 const spanDefinicion = document.getElementById('definicion');
 const spanTraduccion = document.getElementById('traduccion');
 const spanEjemplo = document.getElementById('ejemplo');
-const spanMensaje = document.getElementById('mensaje');
-
+const mensaje = document.getElementById('mensaje');
+const divResultadoGuardado = document.getElementById('resultado-guardado');
+const inputUrlTarjetaResultado = document.getElementById('url-tarjeta');
+const botonCopiar = document.getElementById('copiar');
+const botonGuardar = document.getElementById('guardar');
+let idActual = null;
 
 botonBuscar.addEventListener('click', async () => {
   const palabra = campoPalabra.value.trim();
   if (!palabra) {
     return;
   }
+  divResultadoGuardado.hidden = true;
 
   const respuesta = await fetch(`/buscar/${encodeURIComponent(palabra)}`);
 
   if (!respuesta.ok) {
-    spanMensaje.textContent = "no se encontro la palabra"
+    mensaje.textContent = "no se encontro la palabra"
     spanDefinicion.textContent = '';
     spanTraduccion.textContent = '';
     return;
@@ -43,8 +48,7 @@ document.querySelectorAll('.btn-editar').forEach((btn) => {
     }
   });
 });
-const botonGuardar = document.getElementById('guardar');
-const mensaje = document.getElementById('mensaje');
+
 
 botonGuardar.addEventListener('click', async () => {
   const palabra = campoPalabra.value.trim();
@@ -58,21 +62,46 @@ botonGuardar.addEventListener('click', async () => {
     palabra: palabra,
     traduccion: spanTraduccion.textContent.trim(),
     definicion: spanDefinicion.textContent.trim(),
-    
+
   };
 
-  const respuesta = await fetch('/tarjetas', {
-    method: 'POST',
+  // --- INICIO código Devin: POST la primera vez, PUT las siguientes ---
+  let metodo;
+  let direccion;
+  if (idActual === null) {
+    metodo = 'POST';
+    direccion = '/tarjetas';
+  } else {
+    metodo = 'PUT';
+    direccion = `/tarjetas/${idActual}`;
+  }
+
+  const respuesta = await fetch(direccion, {
+    method: metodo,
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(tarjeta)
-    
   });
+  // --- FIN código Devin ---
 
   const datos = await respuesta.json();
 
   if (respuesta.ok) {
     mensaje.textContent = `Tarjeta guardada con el número ${datos.id}`;
+    const url = `${window.location.origin}/tarjeta.html?id=${datos.id}`;
+    inputUrlTarjetaResultado.value = url;
+    divResultadoGuardado.hidden = false;
+    // --- INICIO código Devin: recordar el id para que los siguientes guardados hagan PUT ---
+    idActual = datos.id;
+    // --- FIN código Devin ---
+  
+
   } else {
-    mensaje.textContent = datos.error;
+    mensaje.textContent = {datos: "error"};
   }
+    botonCopiar.addEventListener('click', async () => {
+      await navigator.clipboard.writeText(inputUrlTarjetaResultado.value);
+      console.log('copiando?')
+    });
+
+
 });
