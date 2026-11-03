@@ -9,6 +9,19 @@ const ARCHIVO = path.join(__dirname, 'tarjetas.json');
 app.use(express.json());
 app.use(express.static('public'));
 
+if (!process.env.CLAVE_EDICION) {
+  console.error('Falta CLAVE_EDICION en el archivo .env');
+  process.exit(1);
+}
+
+function requerirClave(req, res, next) {
+  const clave = req.headers['x-clave'];
+  if (clave !== process.env.CLAVE_EDICION) {
+    return res.status(401).json({ error: 'Clave incorrecta' });
+  }
+  next();
+}
+
 function cargarDatos() {
   if (!fs.existsSync(ARCHIVO)) {
     return { siguienteId: 1, tarjetas: [] };
@@ -50,7 +63,7 @@ async function traducir(texto, origen, destino) {
   return null;
 }
 
-app.post('/tarjetas', (req, res) => {
+app.post('/tarjetas', requerirClave, (req, res) => {
   const { palabra, traduccion, definicion, ejemplo } = req.body || {};
   if (!palabra || !traduccion) {
     return res.status(400).json({ error: 'La palabra y la traducción son obligatorias' });
@@ -82,7 +95,7 @@ app.get('/tarjetas/:id', (req, res) => {
   }
 });
 
-app.put('/tarjetas/:id', (req, res) => {
+app.put('/tarjetas/:id', requerirClave, (req, res) => {
   const numeroId = parseInt(req.params.id, 10);
   const tarjetaEncontrada = tarjetas.find((tarjeta) => tarjeta.id === numeroId);
 
@@ -120,3 +133,4 @@ app.get('/buscar/:palabra', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}/`);
 });
+

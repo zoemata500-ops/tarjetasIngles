@@ -65,7 +65,6 @@ botonGuardar.addEventListener('click', async () => {
 
   };
 
-  // --- INICIO código Devin: POST la primera vez, PUT las siguientes ---
   let metodo;
   let direccion;
   if (idActual === null) {
@@ -81,7 +80,7 @@ botonGuardar.addEventListener('click', async () => {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(tarjeta)
   });
-  // --- FIN código Devin ---
+
 
   const datos = await respuesta.json();
 
