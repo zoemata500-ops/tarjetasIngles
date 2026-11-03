@@ -3,11 +3,11 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
+app.use(express.json());
 const PORT = 3000;
 const ARCHIVO = path.join(__dirname, 'tarjetas.json');
 
-app.use(express.json());
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 if (!process.env.CLAVE_EDICION) {
   console.error('Falta CLAVE_EDICION en el archivo .env');
@@ -41,14 +41,20 @@ function guardarDatos() {
 }
 
 async function definir(palabra) {
-  const respuesta = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${palabra}`);
-  if (respuesta.ok) {
+  try {
+    const traduccionLimpia = palabra.replace(/[.,;:!?]+$/, '').trim();
+    const respuesta = await fetch(
+      `https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(traduccionLimpia.toLowerCase())}`
+    );
+    if (!respuesta.ok) {
+      return null;
+    }
     const datosB = await respuesta.json();
     return datosB[0].meanings[0].definitions[0].definition;
+  } catch (error) {
+    return null;
   }
-  return null;
 }
-
 async function traducir(texto, origen, destino) {
   const respuesta = await fetch(
     `https://api.mymemory.translated.net/get?q=${encodeURIComponent(texto)}&langpair=${origen}|${destino}`
@@ -58,7 +64,8 @@ async function traducir(texto, origen, destino) {
     if (datos.quotaFinished || Number(datos.responseStatus) !== 200) {
       return null;
     }
-    return datos.responseData.translatedText;
+    const traduccionLimpia = datos.responseData.translatedText.replace(/[.,;:!?]+$/, '').trim();
+    return traduccionLimpia ;
   }
   return null;
 }
@@ -120,13 +127,19 @@ app.put('/tarjetas/:id', requerirClave, (req, res) => {
 
 app.get('/buscar/:palabra', async (req, res) => {
   const entrada = req.params.palabra;
-  const traduccion = await traducir(entrada, 'es', 'en');
 
-  if (traduccion) {
+  try {
+    const traduccion = await traducir(entrada, 'es', 'en');
+
+    if (!traduccion) {
+      return res.status(502).json({ error: 'No se pudo traducir la palabra' });
+    }
+
     const definicion = await definir(traduccion);
     res.json({ palabra: entrada, traduccion: traduccion, definicion: definicion });
-  } else {
-    res.status(502).json({ error: 'No se pudo traducir la palabra' });
+  } catch (error) {
+    console.error(error);
+    res.status(502).json({ error: 'No se pudo consultar el servicio externo' });
   }
 });
 
