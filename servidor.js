@@ -1,14 +1,23 @@
 const express = require('express');
-const fs = require('fs');
+// ---
+const { Pool } = require('pg');
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+// ---
+
 const path = require('path');
 
 const app = express();
 app.use(express.json());
 const PORT = 3000;
-const ARCHIVO = path.join(__dirname, 'tarjetas.json');
+
 
 app.use(express.static(path.join(__dirname, 'public')));
-
+// ----
+if (!process.env.DATABASE_URL) {
+  console.error('Falta DATABASE_URL en el archivo .env');
+  process.exit(1);
+}
+// ----
 if (!process.env.CLAVE_EDICION) {
   console.error('Falta CLAVE_EDICION en el archivo .env');
   process.exit(1);
@@ -22,23 +31,6 @@ function requerirClave(req, res, next) {
   next();
 }
 
-function cargarDatos() {
-  if (!fs.existsSync(ARCHIVO)) {
-    return { siguienteId: 1, tarjetas: [] };
-  }
-  const contenido = fs.readFileSync(ARCHIVO, 'utf8');
-  return JSON.parse(contenido);
-}
-
-const datosGuardados = cargarDatos();
-const tarjetas = datosGuardados.tarjetas;
-let siguienteId = datosGuardados.siguienteId;
-
-function guardarDatos() {
-  const datos = { siguienteId: siguienteId, tarjetas: tarjetas };
-  const texto = JSON.stringify(datos, null, 2);
-  fs.writeFileSync(ARCHIVO, texto);
-}
 
 async function definir(palabra) {
   try {
@@ -69,44 +61,29 @@ async function traducir(texto, origen, destino) {
   }
   return null;
 }
-
-app.post('/tarjetas', requerirClave, (req, res) => {
+app.post('/tarjetas', requerirClave, async (req, res) => {
   const { palabra, traduccion, definicion, ejemplo } = req.body || {};
+
   if (!palabra || !traduccion) {
     return res.status(400).json({ error: 'La palabra y la traducción son obligatorias' });
   }
-  const tarjeta = {
-    id: siguienteId,
-    palabra: palabra,
-    traduccion: traduccion,
-    definicion: definicion || '',
-    ejemplo: ejemplo || ''
-  };
-  siguienteId++;
-  tarjetas.push(tarjeta);
-  guardarDatos();
-  res.status(201).json(tarjeta);
-});
 
-app.get('/tarjetas', (req, res) => {
-  res.json(tarjetas);
-});
-
-app.get('/tarjetas/:id', (req, res) => {
-  const numeroId = parseInt(req.params.id, 10);
-  const tarjetaEncontrada = tarjetas.find((tarjeta) => tarjeta.id === numeroId);
-  if (tarjetaEncontrada) {
-    res.json(tarjetaEncontrada);
-  } else {
-    res.status(404).json({ error: 'No se encontró la tarjeta' });
+  try {
+    const resultado = await pool.query(
+      'INSERT INTO tarjetas (palabra, traduccion, definicion, ejemplo) VALUES ($1, $2, $3, $4) RETURNING *',
+      [palabra, traduccion, definicion || '', ejemplo || '']
+    );
+    res.status(201).json(resultado.rows[0]);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al guardar la tarjeta' });
   }
 });
 
-app.put('/tarjetas/:id', requerirClave, (req, res) => {
+app.put('/tarjetas/:id', requerirClave, async (req, res) => {
   const numeroId = parseInt(req.params.id, 10);
-  const tarjetaEncontrada = tarjetas.find((tarjeta) => tarjeta.id === numeroId);
 
-  if (!tarjetaEncontrada) {
+  if (Number.isNaN(numeroId)) {
     return res.status(404).json({ error: 'No se encontró la tarjeta' });
   }
 
@@ -116,14 +93,56 @@ app.put('/tarjetas/:id', requerirClave, (req, res) => {
     return res.status(400).json({ error: 'La palabra y la traducción son obligatorias' });
   }
 
-  tarjetaEncontrada.palabra = palabra;
-  tarjetaEncontrada.traduccion = traduccion;
-  tarjetaEncontrada.definicion = definicion || '';
-  tarjetaEncontrada.ejemplo = ejemplo || '';
+  try {
+    const resultado = await pool.query(
+      'UPDATE tarjetas SET palabra = $1, traduccion = $2, definicion = $3, ejemplo = $4 WHERE id = $5 RETURNING *',
+      [palabra, traduccion, definicion || '', ejemplo || '', numeroId]
+    );
 
-  guardarDatos();
-  res.json(tarjetaEncontrada);
+    if (resultado.rows.length === 0) {
+      return res.status(404).json({ error: 'No se encontró la tarjeta' });
+    }
+
+    res.json(resultado.rows[0]);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al actualizar la tarjeta' });
+  }
 });
+
+app.get('/tarjetas', async (req, res) => {
+  try {
+    const resultado = await pool.query('SELECT * FROM tarjetas ORDER BY id');
+    res.json(resultado.rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al leer las tarjetas' });
+  }
+});
+// --------
+app.get('/tarjetas/:id', async (req, res) => {
+  const numeroId = parseInt(req.params.id, 10);
+
+  if (Number.isNaN(numeroId)) {
+    return res.status(404).json({ error: 'No se encontró la tarjeta' });
+  }
+
+  try {
+    const resultado = await pool.query('SELECT * FROM tarjetas WHERE id = $1', [numeroId]);
+
+    if (resultado.rows.length === 0) {
+      return res.status(404).json({ error: 'No se encontró la tarjeta' });
+    }
+
+    res.json(resultado.rows[0]);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al leer la tarjeta' });
+  }
+});
+// 
+
+
 
 app.get('/buscar/:palabra', async (req, res) => {
   const entrada = req.params.palabra;
