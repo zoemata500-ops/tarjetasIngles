@@ -100,4 +100,21 @@ botonBocina.addEventListener('click', () => {
   hablar(texto, 3);
 });
 
+// --- INICIO código Devin: bocinas de los ejemplos, después de la bocina principal ---
+const botonesEjemplo = document.querySelectorAll('.btn-audio--ejemplo');
+
+botonesEjemplo.forEach((boton, i) => {
+  const spanEjemplo = document.getElementById(`ejemplo-${i + 1}`);
+  console.log('spanEjemplo:', spanEjemplo);
+  boton.addEventListener('click', () => {
+    const texto = spanEjemplo.textContent.trim();
+
+    if (!texto) {
+      return;
+    }
+    hablar(texto, 1);
+  });
+});
+// --- FIN código Devin ---
+
 mostrarTarjeta();
