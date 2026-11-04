@@ -224,3 +224,199 @@ button:focus-visible {
   .tarjeta__ejemplo,
   .mas-ejemplos li { font-size: 1.05rem; }
 }
+
+#bocina.btn-audio {
+  width: 120px;
+  height: 120px;
+  margin: 8px auto 14px;
+  display: grid;
+  place-items: center;
+  border: 4px solid #b71c1c;
+  border-radius: 50%;
+  color: #fff;
+  cursor: pointer;
+  background: radial-gradient(circle at 35% 30%, #ff8a80 0%, #f44336 35%, #c62828 75%, #8e0000 100%);
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  animation: boton-rojo-pulso 2s ease-in-out infinite;
+}
+
+#bocina.btn-audio::before {
+  display: none;
+}
+
+#bocina.btn-audio:hover {
+  transform: translateY(-2px);
+}
+
+#bocina.btn-audio:active {
+  transform: translateY(6px);
+  box-shadow:
+    inset 0 -3px 8px rgba(0, 0, 0, 0.35),
+    inset 0 4px 8px rgba(255, 255, 255, 0.3),
+    0 2px 0 #7f0000,
+    0 4px 10px rgba(183, 28, 28, 0.4);
+  animation: none;
+}
+
+#bocina.btn-audio:focus-visible {
+  outline: 4px solid #ffcdd2;
+  outline-offset: 4px;
+}
+
+@keyframes boton-rojo-pulso {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.12); }
+}
+
+.volteo__check {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.volteo {
+  width: 100%;
+  max-width: 420px;
+  display: grid;
+  transform-style: preserve-3d;
+  transform: perspective(1200px) rotateY(0deg);
+  transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+
+.volteo__check:checked + .volteo {
+  transform: perspective(1200px) rotateY(-180deg);
+}
+
+.volteo > .tarjeta {
+  grid-area: 1 / 1;
+  position: relative;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.tarjeta--reverso {
+  transform: rotateY(180deg);
+}
+
+.btn-ejemplos {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px 4px 6px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  color: var(--turquesa);
+  cursor: pointer;
+  user-select: none;
+}
+.btn-ejemplos:hover { background: #eaf5fa; }
+.btn-ejemplos svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.volteo__check:focus-visible + .volteo .btn-ejemplos {
+  outline: 2px solid var(--turquesa);
+  outline-offset: 2px;
+}
+
+.tarjeta__titulo-reverso {
+  margin-top: 24px;
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+
+@media (min-width: 768px) {
+  .volteo { max-width: 460px; }
+}
+
+.btn-audio--ejemplo {
+  font-size: inherit;
+  width: 1.4em;
+  height: 1.4em;
+  padding: 0.1em;
+  border-radius: 0.3em;
+}
+
+.pantalla:has(> .volteo) {
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 12px;
+  overflow: hidden;
+}
+
+.volteo {
+  flex: 1;
+  max-width: none;
+  transform: perspective(2000px) rotateY(0deg);
+}
+
+.volteo__check:checked + .volteo {
+  transform: perspective(2000px) rotateY(-180deg);
+}
+
+.volteo > .tarjeta {
+  max-width: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 56px 24px 32px;
+}
+
+.volteo #bocina.btn-audio {
+  width: clamp(120px, min(45vw, 28vh), 260px);
+  height: clamp(120px, min(45vw, 28vh), 260px);
+  margin-bottom: clamp(14px, 3vh, 36px);
+}
+
+.volteo .tarjeta__espanol {
+  font-size: clamp(1rem, min(5vw, 3vh), 1.6rem);
+  margin-top: clamp(8px, 2vh, 24px);
+}
+.volteo .tarjeta__ingles {
+  font-size: clamp(2rem, min(12vw, 7vh), 4rem);
+  margin-top: clamp(14px, 2vh, 28px);
+}
+.volteo .tarjeta__linea { margin: clamp(20px, 4vh, 48px) 0; }
+.volteo .tarjeta__ejemplo,
+.volteo .mas-ejemplos li {
+  font-size: clamp(1rem, min(4.8vw, 2.8vh), 1.5rem);
+}
+.volteo .mas-ejemplos li { padding: clamp(12px, 3vh, 32px) 0; }
+.volteo .mas-ejemplos { margin-top: clamp(12px, 3vh, 32px); }
+.volteo .tarjeta__titulo-reverso { font-size: clamp(1.4rem, min(8vw, 5vh), 2.6rem); }
+.volteo .btn-ejemplos { font-size: clamp(0.85rem, 3vmin, 1.1rem); }
+.volteo .btn-ejemplos svg { width: 1.2em; height: 1.2em; }
+
+.volteo .tarjeta__ejemplo,
+.volteo .mas-ejemplos {
+  width: 100%;
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (min-width: 768px) {
+  .pantalla:has(> .volteo) { padding: 24px 24px 24px 80px; }
+  .volteo { max-width: none; }
+}
+
+.ejemplo__textos {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+}
+
+.ejemplo__traduccion {
+  font-size: 0.85em;
+  color: var(--texto-suave);
+  opacity: 0.85;
+}

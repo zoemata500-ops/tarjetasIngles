@@ -2,51 +2,102 @@ const spanPalabra = document.getElementById('palabra');
 const spanTraduccion = document.getElementById('traduccion');
 const spanDefinicion = document.getElementById('definicion');
 const mensaje = document.getElementById('mensaje');
+const botonBocina = document.getElementById('bocina');
 
 const id = new URLSearchParams(window.location.search).get('id');
 
-async function mostrarTarjeta() {
-  const respuesta = await fetch(`/tarjetas/${id}`);
+let rondaActual = 0;
+const vocesListas = esperarVoces();
 
-  if (!respuesta.ok) {
-    mensaje.textContent = 'Esa tarjeta no existe';
-    return;
-  }
+function esperarVoces() {
+  return new Promise((resolve) => {
+    if (!('speechSynthesis' in window)) {
+      resolve([]);
+      return;
+    }
 
-  const tarjeta = await respuesta.json();
-  spanPalabra.textContent = tarjeta.palabra || 'Sin palabra';
-  spanTraduccion.textContent = tarjeta.traduccion || 'Sin traducción';
-  spanDefinicion.textContent = tarjeta.definicion || 'Sin definición disponible';
-  
-  botonBocina.addEventListener('click', () => {
-  hablar(spanTraduccion.textContent, 3);
-});
+    const voces = window.speechSynthesis.getVoices();
+    if (voces.length > 0) {
+      resolve(voces);
+      return;
+    }
+
+    const terminar = () => resolve(window.speechSynthesis.getVoices());
+    window.speechSynthesis.addEventListener('voiceschanged', terminar, { once: true });
+    setTimeout(terminar, 1500);
+  });
 }
 
-// --- INICIO código Devin ---
-const botonBocina = document.getElementById('bocina');
+function elegirVoz(voces) {
+  const ingles = voces.filter((v) => v.lang.replace('_', '-').startsWith('en'));
 
-function hablar(texto, veces) {
-  // 1. Comprobar que el navegador soporta voz. Si no, avisar en 'mensaje' y return.
+  return (
+    ingles.find((v) => v.localService && v.lang.replace('_', '-') === 'en-US') ||
+    ingles.find((v) => v.localService) ||
+    ingles[0] ||
+    null
+  );
+}
+
+function hablarUnaVez(texto, voz) {
+  return new Promise((resolve) => {
+    const utterance = new SpeechSynthesisUtterance(texto);
+    utterance.lang = 'en-US';
+    utterance.rate = 0.9;
+    if (voz) {
+      utterance.voice = voz;
+    }
+    utterance.onend = resolve;
+    utterance.onerror = resolve;
+    window.speechSynthesis.speak(utterance);
+  });
+}
+
+async function hablar(texto, veces) {
   if (!('speechSynthesis' in window)) {
     mensaje.textContent = 'Tu navegador no soporta la voz';
     return;
   }
 
-  // 2. Detener cualquier lectura anterior.
+  rondaActual++;
+  const miRonda = rondaActual;
   window.speechSynthesis.cancel();
 
-  // 3. Repetir 'veces' veces: crear un utterance, configurarlo y pedirle al navegador que hable.
+  const voces = await vocesListas;
+  const voz = elegirVoz(voces);
+
   for (let i = 0; i < veces; i++) {
-    const utterance = new SpeechSynthesisUtterance(texto);
-    utterance.lang = 'en-US';
-    utterance.rate = 0.9;
-    window.speechSynthesis.speak(utterance);
+    if (miRonda !== rondaActual) {
+      return;
+    }
+    await hablarUnaVez(texto, voz);
   }
 }
 
+async function mostrarTarjeta() {
+  try {
+    const respuesta = await fetch(`/tarjetas/${id}`);
 
-// --- FIN código Devin ---
+    if (!respuesta.ok) {
+      mensaje.textContent = 'Esa tarjeta no existe';
+      return;
+    }
+
+    const tarjeta = await respuesta.json();
+    spanPalabra.textContent = tarjeta.palabra || 'Sin palabra';
+    spanTraduccion.textContent = tarjeta.traduccion || 'Sin traducción';
+    spanDefinicion.textContent = tarjeta.definicion || 'Sin definición disponible';
+  } catch (error) {
+    mensaje.textContent = 'No se pudo conectar con el servidor';
+  }
+}
+
+botonBocina.addEventListener('click', () => {
+  const texto = spanTraduccion.textContent.trim();
+  if (!texto) {
+    return;
+  }
+  hablar(texto, 3);
+});
 
 mostrarTarjeta();
-
