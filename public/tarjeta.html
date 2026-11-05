@@ -9,7 +9,6 @@
 </head>
 
 <body>
-  
   <main class="pantalla">
     <button class="btn-volver" type="button" aria-label="Volver">
       <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -17,79 +16,63 @@
       </svg>
     </button>
 
-    <input type="checkbox" id="voltear-tarjeta" class="volteo__check" aria-label="Voltear la tarjeta">
-    <div class="volteo">
-
     <article class="tarjeta">
-      <label for="voltear-tarjeta" class="btn-ejemplos">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M19 12H5M11 6l-6 6 6 6" />
-        </svg>
-        Ejemplos
-      </label>
-
-      <!-- Ilustración -->
       <div class="tarjeta__imagen">
-        <button class="btn-audio" type="button" data-texto="to improve" data-idioma="en"
-          aria-label="Escuchar: to improve" id="bocina"></button>
+        <svg viewBox="0 0 160 130" role="img" aria-label="Gráfica que sube">
+          <rect x="34" y="30" width="92" height="64" rx="4" fill="#d9eaf9" />
+          <line x1="80" y1="30" x2="80" y2="94" stroke="#fff" stroke-width="3" />
+          <polyline points="50,78 66,60 92,70 118,40" fill="none" stroke="#2fb5a8" stroke-width="4"
+            stroke-linecap="round" stroke-linejoin="round" />
+          <polygon points="108,34 124,34 124,50" fill="#2fb5a8" />
+          <circle cx="66" cy="60" r="7" fill="#f0576a" />
+          <circle cx="92" cy="70" r="7" fill="#5b4fb0" />
+          <circle cx="50" cy="80" r="7" fill="#f4c93a" />
+          <path d="M18 96h124l-12 22H30z" fill="#6a5fb5" />
+        </svg>
       </div>
 
-      <!-- Palabra en español -->
-      <p class="tarjeta__espanol"><span id="palabra"></span></p>
+      <div id="resultado-guardado" hidden>
+        <p>Dirección para tu etiqueta NFC:</p>
+        <input type="text" id="url-tarjeta" readonly>
+        <button type="button" id="copiar">Copiar</button>
+        <a id="abrir-tarjeta" href="#" target="_blank">Abrir tarjeta</a>
+      </div>
 
-      <!-- Palabra en inglés + audio -->
+      <p class="tarjeta__espanol">
+        <input type="text" id="palabra" placeholder="Escribe una palabra en español">
+      </p>
+      <button id="buscar" type="button">Buscar</button>
+      <p id="mensaje"></p>
+
       <h1 class="tarjeta__ingles">
         <span id="traduccion"></span>
+        <button type="button" class="btn-editar" data-objetivo="traduccion">Editar</button>
       </h1>
-    
 
       <hr class="tarjeta__linea">
 
-      <!-- Ejemplo práctico + audio -->
       <div class="tarjeta__ejemplo">
-        <div>Definición: <span id="definicion"></span></div>
-      </div>  
-      <p id="mensaje"></p>
+        Definición: <span id="definicion"></span>
+        <button type="button" class="btn-editar" data-objetivo="definicion">Editar</button>
+      </div>
+
+      <button type="button" id="guardar">Guardar</button>
     </article>
 
-    <article class="tarjeta tarjeta--reverso">
-      <label for="voltear-tarjeta" class="btn-ejemplos">
+    <h2 class="tarjeta__titulo-reverso">Ejemplos</h2>
+
+    <div class="ejemplos-adicionales">
+      <button type="button" id="agregar-ejemplo" class="btn-agregar-ejemplo" aria-label="Agregar ejemplo">
         <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M5 12h14M13 6l6 6-6 6" />
+          <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
         </svg>
-        Volver
-      </label>
-
-      <h2 class="tarjeta__titulo-reverso">Ejemplos</h2>
-
-      <ul class="mas-ejemplos">
-        <li>
-          <button class="btn-audio btn-audio--ejemplo" type="button" aria-label="Escuchar el primer ejemplo"></button>
-          <div class="ejemplo__textos">
-            <span id="ejemplo-1">cat is big</span>
-            <span class="ejemplo__traduccion" id="traduccion-ejemplo-1">Aquí aparecerá la traducción del primer ejemplo.</span>
-          </div>
-        </li>
-        <li>
-          <button class="btn-audio btn-audio--ejemplo" type="button" aria-label="Escuchar el segundo ejemplo"></button>
-          <div class="ejemplo__textos">
-            <span id="ejemplo-2">dog .</span>
-            <span class="ejemplo__traduccion" id="traduccion-ejemplo-2">Aquí aparecerá la traducción del segundo ejemplo.</span>
-          </div>
-        </li>
-        <li>
-          <button class="btn-audio btn-audio--ejemplo" type="button" aria-label="Escuchar el tercer ejemplo"></button>
-          <div class="ejemplo__textos">
-            <span id="ejemplo-3">bird flies high</span>
-            <span class="ejemplo__traduccion" id="traduccion-ejemplo-3">Aquí aparecerá la traducción del tercer ejemplo.</span>
-          </div>
-        </li>
-      </ul>
-    </article>
+      </button>
     </div>
+
+    <ul class="mas-ejemplos" id="lista-ejemplos-adicionales"></ul>
   </main>
 
-  <script src="tarjeta.js"></script>
+  <script src="app.js"></script>
 </body>
 
 </html>

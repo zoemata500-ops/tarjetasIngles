@@ -420,3 +420,118 @@ button:focus-visible {
   color: var(--texto-suave);
   opacity: 0.85;
 }
+
+/* INICIO: Estilos para sección de ejemplos adicionales */
+.ejemplos-adicionales {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--linea);
+}
+
+.btn-agregar-ejemplo {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border: 2px solid var(--turquesa);
+  border-radius: 50%;
+  background: var(--tarjeta);
+  color: var(--turquesa);
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  margin-bottom: 12px;
+}
+
+.btn-agregar-ejemplo:hover {
+  background: var(--turquesa);
+  color: white;
+  transform: scale(1.05);
+}
+
+.btn-agregar-ejemplo:active {
+  transform: scale(0.95);
+}
+
+.btn-agregar-ejemplo svg {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.ejemplos-adicionales__lista {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ejemplos-adicionales__lista li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 12px 0;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  border-bottom: 1px solid var(--linea);
+}
+
+.ejemplos-adicionales__lista li:last-child {
+  border-bottom: 0;
+}
+
+.ejemplo-adicional {
+  width: 100%;
+  min-height: 60px;
+  padding: 8px 12px;
+  border: 1px solid var(--linea);
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  resize: vertical;
+  transition: border-color 0.2s ease;
+}
+
+.ejemplo-adicional:focus {
+  outline: none;
+  border-color: var(--turquesa);
+}
+
+.ejemplo-adicional::placeholder {
+  color: var(--texto-suave);
+  opacity: 0.7;
+}
+
+.btn-eliminar-ejemplo {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  border: 0;
+  background: none;
+  color: #e74c3c;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+}
+
+.btn-eliminar-ejemplo:hover {
+  background: #fdecea;
+}
+
+.btn-eliminar-ejemplo svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+/* FIN: Estilos para sección de ejemplos adicionales */

@@ -1,23 +1,20 @@
 const express = require('express');
-// ---
 const { Pool } = require('pg');
-const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-// ---
-
 const path = require('path');
+
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
 const app = express();
 app.use(express.json());
 const PORT = 3000;
 
-
 app.use(express.static(path.join(__dirname, 'public')));
-// ----
+
 if (!process.env.DATABASE_URL) {
   console.error('Falta DATABASE_URL en el archivo .env');
   process.exit(1);
 }
-// ----
+
 if (!process.env.CLAVE_EDICION) {
   console.error('Falta CLAVE_EDICION en el archivo .env');
   process.exit(1);
@@ -30,7 +27,6 @@ function requerirClave(req, res, next) {
   }
   next();
 }
-
 
 async function definir(palabra) {
   try {
@@ -47,6 +43,7 @@ async function definir(palabra) {
     return null;
   }
 }
+
 async function traducir(texto, origen, destino) {
   const respuesta = await fetch(
     `https://api.mymemory.translated.net/get?q=${encodeURIComponent(texto)}&langpair=${origen}|${destino}`
@@ -57,21 +54,28 @@ async function traducir(texto, origen, destino) {
       return null;
     }
     const traduccionLimpia = datos.responseData.translatedText.replace(/[.,;:!?]+$/, '').trim();
-    return traduccionLimpia ;
+    return traduccionLimpia;
   }
   return null;
 }
+
 app.post('/tarjetas', requerirClave, async (req, res) => {
-  const { palabra, traduccion, definicion, ejemplo } = req.body || {};
+  const { palabra, traduccion, definicion, ejemplos } = req.body;
 
   if (!palabra || !traduccion) {
     return res.status(400).json({ error: 'La palabra y la traducción son obligatorias' });
   }
 
+  if (!Array.isArray(ejemplos)) {
+    return res.status(400).json({ error: 'ejemplos debe ser un arreglo' });
+  }
+
+  const ejemplosTexto = JSON.stringify(ejemplos);
+
   try {
     const resultado = await pool.query(
-      'INSERT INTO tarjetas (palabra, traduccion, definicion, ejemplo) VALUES ($1, $2, $3, $4) RETURNING *',
-      [palabra, traduccion, definicion || '', ejemplo || '']
+      'INSERT INTO tarjetas (palabra, traduccion, definicion, ejemplos_adicionales) VALUES ($1, $2, $3, $4) RETURNING *',
+      [palabra, traduccion, definicion || '', ejemplosTexto]
     );
     res.status(201).json(resultado.rows[0]);
   } catch (error) {
@@ -87,16 +91,22 @@ app.put('/tarjetas/:id', requerirClave, async (req, res) => {
     return res.status(404).json({ error: 'No se encontró la tarjeta' });
   }
 
-  const { palabra, traduccion, definicion, ejemplo } = req.body || {};
+  const { palabra, traduccion, definicion, ejemplos } = req.body;
 
   if (!palabra || !traduccion) {
     return res.status(400).json({ error: 'La palabra y la traducción son obligatorias' });
   }
 
+  if (!Array.isArray(ejemplos)) {
+    return res.status(400).json({ error: 'ejemplos debe ser un arreglo' });
+  }
+
+  const ejemplosTexto = JSON.stringify(ejemplos);
+
   try {
     const resultado = await pool.query(
-      'UPDATE tarjetas SET palabra = $1, traduccion = $2, definicion = $3, ejemplo = $4 WHERE id = $5 RETURNING *',
-      [palabra, traduccion, definicion || '', ejemplo || '', numeroId]
+      'UPDATE tarjetas SET palabra = $1, traduccion = $2, definicion = $3, ejemplos_adicionales = $4 WHERE id = $5 RETURNING *',
+      [palabra, traduccion, definicion || '', ejemplosTexto, numeroId]
     );
 
     if (resultado.rows.length === 0) {
@@ -119,7 +129,7 @@ app.get('/tarjetas', async (req, res) => {
     res.status(500).json({ error: 'Error al leer las tarjetas' });
   }
 });
-// --------
+
 app.get('/tarjetas/:id', async (req, res) => {
   const numeroId = parseInt(req.params.id, 10);
 
@@ -140,9 +150,6 @@ app.get('/tarjetas/:id', async (req, res) => {
     res.status(500).json({ error: 'Error al leer la tarjeta' });
   }
 });
-// 
-
-
 
 app.get('/buscar/:palabra', async (req, res) => {
   const entrada = req.params.palabra;
@@ -165,4 +172,3 @@ app.get('/buscar/:palabra', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}/`);
 });
-

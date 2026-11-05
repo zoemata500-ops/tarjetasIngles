@@ -3,6 +3,7 @@ const spanTraduccion = document.getElementById('traduccion');
 const spanDefinicion = document.getElementById('definicion');
 const mensaje = document.getElementById('mensaje');
 const botonBocina = document.getElementById('bocina');
+const listaEjemplos = document.getElementById('lista-ejemplos');
 
 const id = new URLSearchParams(window.location.search).get('id');
 
@@ -74,6 +75,23 @@ async function hablar(texto, veces) {
   }
 }
 
+function mostrarEjemplos(ejemplos) {
+  listaEjemplos.innerHTML = '';
+
+  if (!Array.isArray(ejemplos) || ejemplos.length === 0) {
+    const vacio = document.createElement('li');
+    vacio.textContent = 'Esta tarjeta no tiene ejemplos';
+    listaEjemplos.appendChild(vacio);
+    return;
+  }
+
+  ejemplos.forEach((ejemplo) => {
+    const li = document.createElement('li');
+    li.textContent = ejemplo;
+    listaEjemplos.appendChild(li);
+  });
+}
+
 async function mostrarTarjeta() {
   try {
     const respuesta = await fetch(`/tarjetas/${id}`);
@@ -87,6 +105,7 @@ async function mostrarTarjeta() {
     spanPalabra.textContent = tarjeta.palabra || 'Sin palabra';
     spanTraduccion.textContent = tarjeta.traduccion || 'Sin traducción';
     spanDefinicion.textContent = tarjeta.definicion || 'Sin definición disponible';
+    mostrarEjemplos(tarjeta.ejemplos_adicionales);
   } catch (error) {
     mensaje.textContent = 'No se pudo conectar con el servidor';
   }
@@ -99,22 +118,5 @@ botonBocina.addEventListener('click', () => {
   }
   hablar(texto, 3);
 });
-
-// --- INICIO código Devin: bocinas de los ejemplos, después de la bocina principal ---
-const botonesEjemplo = document.querySelectorAll('.btn-audio--ejemplo');
-
-botonesEjemplo.forEach((boton, i) => {
-  const spanEjemplo = document.getElementById(`ejemplo-${i + 1}`);
-  console.log('spanEjemplo:', spanEjemplo);
-  boton.addEventListener('click', () => {
-    const texto = spanEjemplo.textContent.trim();
-
-    if (!texto) {
-      return;
-    }
-    hablar(texto, 1);
-  });
-});
-// --- FIN código Devin ---
 
 mostrarTarjeta();

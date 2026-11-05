@@ -10,6 +10,11 @@ const botonCopiar = document.getElementById('copiar');
 const botonGuardar = document.getElementById('guardar');
 const enlaceAbrir = document.getElementById('abrir-tarjeta');
 
+// INICIO: Elementos para ejemplos adicionales
+const botonAgregarEjemplo = document.getElementById('agregar-ejemplo');
+const listaEjemplosAdicionales = document.getElementById('lista-ejemplos-adicionales');
+// FIN: Elementos para ejemplos adicionales
+
 const SIN_DEFINICION = 'Sin definición disponible';
 let idActual = null;
 
@@ -46,7 +51,7 @@ botonBuscar.addEventListener('click', async () => {
   if (spanEjemplo) {
     spanEjemplo.textContent = '';
   }
-
+ 
   try {
     const respuesta = await fetch(`/buscar/${encodeURIComponent(palabra)}`);
     const datos = await respuesta.json();
@@ -96,7 +101,8 @@ botonGuardar.addEventListener('click', async () => {
     palabra: palabra,
     traduccion: limpiar(spanTraduccion.textContent),
     definicion: limpiar(spanDefinicion.textContent),
-    ejemplo: spanEjemplo ? limpiar(spanEjemplo.textContent) : ''
+    ejemplos: obtenerEjemplosAdicionales()
+
   };
 
   let metodo;
@@ -152,3 +158,55 @@ botonCopiar.addEventListener('click', async () => {
     mensaje.textContent = 'Copia la URL con Ctrl+C';
   }
 });
+
+
+
+function crearEjemploAdicional() {
+
+
+  const li = document.createElement('li');
+  li.className = 'item-ejemplo';
+
+  const textarea = document.createElement('textarea');
+  textarea.className = 'ejemplo-adicional';
+
+  textarea.placeholder = 'Escribe tu ejemplo aquí...';
+  textarea.rows = 2;
+
+  const botonEliminar = document.createElement('button');
+  botonEliminar.className = 'btn-eliminar-ejemplo';
+  botonEliminar.type = 'button';
+  botonEliminar.setAttribute('aria-label', 'Eliminar este ejemplo');
+  botonEliminar.innerHTML = `
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  `;
+
+  botonEliminar.addEventListener('click', () => {
+    li.remove();
+  });
+
+  li.appendChild(textarea);
+  li.appendChild(botonEliminar);
+  listaEjemplosAdicionales.appendChild(li);
+
+  textarea.focus();
+}
+
+
+function obtenerEjemplosAdicionales() {
+  const textareas = listaEjemplosAdicionales.querySelectorAll('textarea');
+  const ejemplos = [];
+
+  textareas.forEach((textarea) => {
+    const texto = textarea.value.trim();
+    if (texto) {
+      ejemplos.push(texto);
+    }
+  });
+
+  return ejemplos;
+}
+
+botonAgregarEjemplo.addEventListener('click', crearEjemploAdicional);
