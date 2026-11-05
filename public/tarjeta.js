@@ -87,23 +87,37 @@ function mostrarEjemplos(ejemplos) {
   }
 
   ejemplos.forEach((ejemplo) => {
+    const textoIngles = typeof ejemplo === 'string' ? ejemplo : ejemplo.ingles;
+    const textoEspanol = typeof ejemplo === 'string' ? '' : ejemplo.espanol;
+
+    if (!textoIngles) {
+      return;
+    }
+
     const li = document.createElement('li');
 
     const botonAudio = document.createElement('button');
     botonAudio.type = 'button';
     botonAudio.className = 'btn-audio btn-audio--ejemplo';
-    botonAudio.setAttribute('aria-label', `Escuchar: ${ejemplo}`);
+    botonAudio.setAttribute('aria-label', `Escuchar: ${textoIngles}`);
     botonAudio.addEventListener('click', () => {
-      hablar(ejemplo, 1);
+      hablar(textoIngles, 1);
     });
 
     const textos = document.createElement('div');
     textos.className = 'ejemplo__textos';
 
     const spanIngles = document.createElement('span');
-    spanIngles.textContent = ejemplo;
-
+    spanIngles.textContent = textoIngles;
     textos.appendChild(spanIngles);
+
+    if (textoEspanol) {
+      const spanEspanol = document.createElement('span');
+      spanEspanol.className = 'ejemplo__traduccion';
+      spanEspanol.textContent = textoEspanol;
+      textos.appendChild(spanEspanol);
+    }
+
     li.appendChild(botonAudio);
     li.appendChild(textos);
     listaEjemplos.appendChild(li);

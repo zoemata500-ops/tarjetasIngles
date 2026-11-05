@@ -155,7 +155,7 @@ botonCopiar.addEventListener('click', async () => {
   }
 });
 
-function crearEjemploAdicional(texto = '') {
+function crearEjemploAdicional(textoIngles = '', textoEspanol = '') {
   const li = document.createElement('li');
   li.className = 'item-ejemplo';
 
@@ -166,12 +166,13 @@ function crearEjemploAdicional(texto = '') {
   ingles.className = 'ejemplo-ingles';
   ingles.placeholder = 'Escribe tu ejemplo en inglés...';
   ingles.rows = 2;
-  ingles.value = texto;
+  ingles.value = textoIngles;
 
   const espanol = document.createElement('textarea');
   espanol.className = 'ejemplo-espanol';
   espanol.placeholder = 'Escribe la traducción (opcional)...';
   espanol.rows = 2;
+  espanol.value = textoEspanol;
 
   const botonEliminar = document.createElement('button');
   botonEliminar.className = 'btn-eliminar-ejemplo';
@@ -193,19 +194,21 @@ function crearEjemploAdicional(texto = '') {
   li.appendChild(botonEliminar);
   listaEjemplosAdicionales.appendChild(li);
 
-  if (!texto) {
+  if (!textoIngles) {
     ingles.focus();
   }
 }
 
 function obtenerEjemplosAdicionales() {
-  const camposIngles = listaEjemplosAdicionales.querySelectorAll('.ejemplo-ingles');
+  const filas = listaEjemplosAdicionales.querySelectorAll('.item-ejemplo');
   const ejemplos = [];
 
-  camposIngles.forEach((campo) => {
-    const texto = campo.value.trim();
-    if (texto) {
-      ejemplos.push(texto);
+  filas.forEach((fila) => {
+    const ingles = fila.querySelector('.ejemplo-ingles').value.trim();
+    const espanol = fila.querySelector('.ejemplo-espanol').value.trim();
+
+    if (ingles) {
+      ejemplos.push({ ingles: ingles, espanol: espanol });
     }
   });
 
@@ -241,7 +244,11 @@ async function llenarInformacionTarjeta() {
     listaEjemplosAdicionales.innerHTML = '';
     if (Array.isArray(tarjeta.ejemplos_adicionales)) {
       tarjeta.ejemplos_adicionales.forEach((ejemplo) => {
-        crearEjemploAdicional(ejemplo);
+        if (typeof ejemplo === 'string') {
+          crearEjemploAdicional(ejemplo, '');
+        } else {
+          crearEjemploAdicional(ejemplo.ingles || '', ejemplo.espanol || '');
+        }
       });
     }
 
