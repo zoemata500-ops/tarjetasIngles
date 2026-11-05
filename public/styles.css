@@ -564,3 +564,16 @@ button:focus-visible {
     max-width: 460px;
   }
 }
+.enlace-editar {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  color: var(--turquesa);
+  text-decoration: none;
+  user-select: none;
+}
+.enlace-editar:hover { background: #eaf5fa; }
+.volteo .enlace-editar { font-size: clamp(0.85rem, 3vmin, 1.1rem); }

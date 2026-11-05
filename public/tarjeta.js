@@ -4,6 +4,7 @@ const spanDefinicion = document.getElementById('definicion');
 const mensaje = document.getElementById('mensaje');
 const botonBocina = document.getElementById('bocina');
 const listaEjemplos = document.getElementById('lista-ejemplos');
+const editarPagina = document.getElementById('editar_pagina');
 
 const id = new URLSearchParams(window.location.search).get('id');
 
@@ -122,6 +123,7 @@ async function mostrarTarjeta() {
     spanPalabra.textContent = tarjeta.palabra || 'Sin palabra';
     spanTraduccion.textContent = tarjeta.traduccion || 'Sin traducción';
     spanDefinicion.textContent = tarjeta.definicion || 'Sin definición disponible';
+    editarPagina.href = `/index.html?id=${id}`;
     mostrarEjemplos(tarjeta.ejemplos_adicionales);
   } catch (error) {
     mensaje.textContent = 'No se pudo conectar con el servidor';

@@ -155,7 +155,7 @@ botonCopiar.addEventListener('click', async () => {
   }
 });
 
-function crearEjemploAdicional() {
+function crearEjemploAdicional(texto = '') {
   const li = document.createElement('li');
   li.className = 'item-ejemplo';
 
@@ -166,6 +166,7 @@ function crearEjemploAdicional() {
   ingles.className = 'ejemplo-ingles';
   ingles.placeholder = 'Escribe tu ejemplo en inglés...';
   ingles.rows = 2;
+  ingles.value = texto;
 
   const espanol = document.createElement('textarea');
   espanol.className = 'ejemplo-espanol';
@@ -192,7 +193,9 @@ function crearEjemploAdicional() {
   li.appendChild(botonEliminar);
   listaEjemplosAdicionales.appendChild(li);
 
-  ingles.focus();
+  if (!texto) {
+    ingles.focus();
+  }
 }
 
 function obtenerEjemplosAdicionales() {
@@ -209,4 +212,44 @@ function obtenerEjemplosAdicionales() {
   return ejemplos;
 }
 
-botonAgregarEjemplo.addEventListener('click', crearEjemploAdicional);
+botonAgregarEjemplo.addEventListener('click', () => {
+  crearEjemploAdicional();
+});
+
+async function llenarInformacionTarjeta() {
+  const parametros = new URLSearchParams(window.location.search);
+  const id = parametros.get('id');
+
+  if (!id) {
+    return;
+  }
+
+  try {
+    const respuesta = await fetch(`/tarjetas/${encodeURIComponent(id)}`);
+
+    if (!respuesta.ok) {
+      mensaje.textContent = 'Esa tarjeta no existe';
+      return;
+    }
+
+    const tarjeta = await respuesta.json();
+
+    campoPalabra.value = tarjeta.palabra || '';
+    spanTraduccion.textContent = tarjeta.traduccion || '';
+    spanDefinicion.textContent = tarjeta.definicion || SIN_DEFINICION;
+
+    listaEjemplosAdicionales.innerHTML = '';
+    if (Array.isArray(tarjeta.ejemplos_adicionales)) {
+      tarjeta.ejemplos_adicionales.forEach((ejemplo) => {
+        crearEjemploAdicional(ejemplo);
+      });
+    }
+
+    idActual = tarjeta.id;
+    mensaje.textContent = `Editando la tarjeta ${tarjeta.id}`;
+  } catch (error) {
+    mensaje.textContent = 'No se pudo conectar con el servidor';
+  }
+}
+
+llenarInformacionTarjeta();
