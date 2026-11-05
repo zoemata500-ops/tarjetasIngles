@@ -87,7 +87,24 @@ function mostrarEjemplos(ejemplos) {
 
   ejemplos.forEach((ejemplo) => {
     const li = document.createElement('li');
-    li.textContent = ejemplo;
+
+    const botonAudio = document.createElement('button');
+    botonAudio.type = 'button';
+    botonAudio.className = 'btn-audio btn-audio--ejemplo';
+    botonAudio.setAttribute('aria-label', `Escuchar: ${ejemplo}`);
+    botonAudio.addEventListener('click', () => {
+      hablar(ejemplo, 1);
+    });
+
+    const textos = document.createElement('div');
+    textos.className = 'ejemplo__textos';
+
+    const spanIngles = document.createElement('span');
+    spanIngles.textContent = ejemplo;
+
+    textos.appendChild(spanIngles);
+    li.appendChild(botonAudio);
+    li.appendChild(textos);
     listaEjemplos.appendChild(li);
   });
 }

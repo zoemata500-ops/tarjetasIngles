@@ -9,11 +9,8 @@ const inputUrlTarjetaResultado = document.getElementById('url-tarjeta');
 const botonCopiar = document.getElementById('copiar');
 const botonGuardar = document.getElementById('guardar');
 const enlaceAbrir = document.getElementById('abrir-tarjeta');
-
-// INICIO: Elementos para ejemplos adicionales
 const botonAgregarEjemplo = document.getElementById('agregar-ejemplo');
 const listaEjemplosAdicionales = document.getElementById('lista-ejemplos-adicionales');
-// FIN: Elementos para ejemplos adicionales
 
 const SIN_DEFINICION = 'Sin definición disponible';
 let idActual = null;
@@ -51,7 +48,7 @@ botonBuscar.addEventListener('click', async () => {
   if (spanEjemplo) {
     spanEjemplo.textContent = '';
   }
- 
+
   try {
     const respuesta = await fetch(`/buscar/${encodeURIComponent(palabra)}`);
     const datos = await respuesta.json();
@@ -102,7 +99,6 @@ botonGuardar.addEventListener('click', async () => {
     traduccion: limpiar(spanTraduccion.textContent),
     definicion: limpiar(spanDefinicion.textContent),
     ejemplos: obtenerEjemplosAdicionales()
-
   };
 
   let metodo;
@@ -159,19 +155,22 @@ botonCopiar.addEventListener('click', async () => {
   }
 });
 
-
-
 function crearEjemploAdicional() {
-
-
   const li = document.createElement('li');
   li.className = 'item-ejemplo';
 
-  const textarea = document.createElement('textarea');
-  textarea.className = 'ejemplo-adicional';
+  const campos = document.createElement('div');
+  campos.className = 'item-ejemplo__campos';
 
-  textarea.placeholder = 'Escribe tu ejemplo aquí...';
-  textarea.rows = 2;
+  const ingles = document.createElement('textarea');
+  ingles.className = 'ejemplo-ingles';
+  ingles.placeholder = 'Escribe tu ejemplo en inglés...';
+  ingles.rows = 2;
+
+  const espanol = document.createElement('textarea');
+  espanol.className = 'ejemplo-espanol';
+  espanol.placeholder = 'Escribe la traducción (opcional)...';
+  espanol.rows = 2;
 
   const botonEliminar = document.createElement('button');
   botonEliminar.className = 'btn-eliminar-ejemplo';
@@ -187,20 +186,21 @@ function crearEjemploAdicional() {
     li.remove();
   });
 
-  li.appendChild(textarea);
+  campos.appendChild(ingles);
+  campos.appendChild(espanol);
+  li.appendChild(campos);
   li.appendChild(botonEliminar);
   listaEjemplosAdicionales.appendChild(li);
 
-  textarea.focus();
+  ingles.focus();
 }
 
-
 function obtenerEjemplosAdicionales() {
-  const textareas = listaEjemplosAdicionales.querySelectorAll('textarea');
+  const camposIngles = listaEjemplosAdicionales.querySelectorAll('.ejemplo-ingles');
   const ejemplos = [];
 
-  textareas.forEach((textarea) => {
-    const texto = textarea.value.trim();
+  camposIngles.forEach((campo) => {
+    const texto = campo.value.trim();
     if (texto) {
       ejemplos.push(texto);
     }

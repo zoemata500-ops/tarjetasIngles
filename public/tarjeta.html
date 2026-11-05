@@ -9,7 +9,7 @@
 </head>
 
 <body>
-  
+
   <main class="pantalla">
     <button class="btn-volver" type="button" aria-label="Volver">
       <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -20,50 +20,50 @@
     <input type="checkbox" id="voltear-tarjeta" class="volteo__check" aria-label="Voltear la tarjeta">
     <div class="volteo">
 
-    <article class="tarjeta">
-      <label for="voltear-tarjeta" class="btn-ejemplos">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M19 12H5M11 6l-6 6 6 6" />
-        </svg>
-        Ejemplos
-      </label>
+      <article class="tarjeta">
+        <label for="voltear-tarjeta" class="btn-ejemplos">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M19 12H5M11 6l-6 6 6 6" />
+          </svg>
+          Ejemplos
+        </label>
 
-      <!-- Ilustración -->
-      <div class="tarjeta__imagen">
-        <button class="btn-audio" type="button" data-texto="to improve" data-idioma="en"
-          aria-label="Escuchar: to improve" id="bocina"></button>
-      </div>
+        <!-- Ilustración -->
+        <div class="tarjeta__imagen">
+          <button class="btn-audio" type="button" data-texto="to improve" data-idioma="en"
+            aria-label="Escuchar: to improve" id="bocina"></button>
+        </div>
 
-      <!-- Palabra en español -->
-      <p class="tarjeta__espanol"><span id="palabra"></span></p>
+        <!-- Palabra en español -->
+        <p class="tarjeta__espanol"><span id="palabra"></span></p>
 
-      <!-- Palabra en inglés + audio -->
-      <h1 class="tarjeta__ingles">
-        <span id="traduccion"></span>
-      </h1>
-    
+        <!-- Palabra en inglés + audio -->
+        <h1 class="tarjeta__ingles">
+          <span id="traduccion"></span>
+        </h1>
 
-      <hr class="tarjeta__linea">
 
-      <!-- Ejemplo práctico + audio -->
-      <div class="tarjeta__ejemplo">
-        <div>Definición: <span id="definicion"></span></div>
-      </div>  
-      <p id="mensaje"></p>
-    </article>
+        <hr class="tarjeta__linea">
 
-    <article class="tarjeta tarjeta--reverso">
-      <label for="voltear-tarjeta" class="btn-ejemplos">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M5 12h14M13 6l6 6-6 6" />
-        </svg>
-        Volver
-      </label>
+        <!-- Ejemplo práctico + audio -->
+        <div class="tarjeta__ejemplo">
+          <div>Definición: <span id="definicion"></span></div>
+        </div>
+        <p id="mensaje"></p>
+      </article>
 
-      <h2 class="tarjeta__titulo-reverso">Ejemplos</h2>
-      <ul class="mas-ejemplos" id="lista-ejemplos"></ul>
-      
-    </article>
+      <article class="tarjeta tarjeta--reverso">
+        <label for="voltear-tarjeta" class="btn-ejemplos">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M5 12h14M13 6l6 6-6 6" />
+          </svg>
+          Volver
+        </label>
+
+        <h2 class="tarjeta__titulo-reverso">Ejemplos</h2>
+        <ul class="mas-ejemplos" id="lista-ejemplos"></ul>
+
+      </article>
     </div>
   </main>
 

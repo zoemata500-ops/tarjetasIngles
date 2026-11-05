@@ -422,31 +422,38 @@ button:focus-visible {
 }
 
 /* INICIO: Estilos para sección de ejemplos adicionales */
-.ejemplos-adicionales {
-  margin-top: 16px;
-  padding-top: 16px;
-  border-top: 1px solid var(--linea);
+/* ---------- Formulario: encabezado de ejemplos ---------- */
+.ejemplos-encabezado {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 24px 0 12px;
+}
+
+.ejemplos-encabezado .tarjeta__titulo-reverso {
+  margin: 0;
 }
 
 .btn-agregar-ejemplo {
-  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 48px;
-  height: 48px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
   border: 2px solid var(--turquesa);
   border-radius: 50%;
   background: var(--tarjeta);
   color: var(--turquesa);
   cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.2s ease;
-  margin-bottom: 12px;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
 
 .btn-agregar-ejemplo:hover {
   background: var(--turquesa);
-  color: white;
+  color: #fff;
   transform: scale(1.05);
 }
 
@@ -455,70 +462,86 @@ button:focus-visible {
 }
 
 .btn-agregar-ejemplo svg {
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
   fill: none;
   stroke: currentColor;
   stroke-width: 2;
   stroke-linecap: round;
 }
 
-.ejemplos-adicionales__lista {
+/* ---------- Formulario: lista de ejemplos ---------- */
+.lista-ejemplos-form {
   list-style: none;
-  padding: 0;
+  width: 100%;
+  max-width: 420px;
   margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.ejemplos-adicionales__lista li {
+.item-ejemplo {
   display: flex;
   align-items: flex-start;
   gap: 8px;
-  padding: 12px 0;
-  font-size: 0.95rem;
-  line-height: 1.4;
-  border-bottom: 1px solid var(--linea);
+  padding: 12px;
+  background: var(--tarjeta);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(40, 60, 100, 0.1);
 }
 
-.ejemplos-adicionales__lista li:last-child {
-  border-bottom: 0;
+.item-ejemplo__campos {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.ejemplo-adicional {
+.item-ejemplo textarea {
   width: 100%;
   min-height: 60px;
   padding: 8px 12px;
   border: 1px solid var(--linea);
   border-radius: 8px;
   font-family: inherit;
-  font-size: inherit;
-  line-height: inherit;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: var(--texto);
   resize: vertical;
   transition: border-color 0.2s ease;
 }
 
-.ejemplo-adicional:focus {
+.item-ejemplo textarea:focus {
   outline: none;
   border-color: var(--turquesa);
 }
 
-.ejemplo-adicional::placeholder {
+.item-ejemplo textarea::placeholder {
   color: var(--texto-suave);
   opacity: 0.7;
 }
 
+.item-ejemplo .ejemplo-espanol {
+  font-size: 0.85rem;
+  color: var(--texto-suave);
+}
+
 .btn-eliminar-ejemplo {
   flex: none;
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
+  padding: 0;
   border: 0;
+  border-radius: 50%;
   background: none;
   color: #e74c3c;
   cursor: pointer;
-  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
   transition: background-color 0.2s ease;
 }
 
@@ -534,4 +557,10 @@ button:focus-visible {
   stroke-width: 2;
   stroke-linecap: round;
 }
-/* FIN: Estilos para sección de ejemplos adicionales */
+
+@media (min-width: 768px) {
+  .ejemplos-encabezado,
+  .lista-ejemplos-form {
+    max-width: 460px;
+  }
+}
