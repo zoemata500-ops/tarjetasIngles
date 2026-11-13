@@ -3,6 +3,7 @@ const spanTraduccion = document.getElementById('traduccion');
 const spanDefinicion = document.getElementById('definicion');
 const mensaje = document.getElementById('mensaje');
 const botonBocina = document.getElementById('bocina');
+const botonVolver = document.querySelector('.btn-volver');
 const listaEjemplos = document.getElementById('lista-ejemplos');
 const editarPagina = document.getElementById('editar_pagina');
 
@@ -136,6 +137,7 @@ async function mostrarTarjeta() {
     const tarjeta = await respuesta.json();
     spanPalabra.textContent = tarjeta.palabra || 'Sin palabra';
     spanTraduccion.textContent = tarjeta.traduccion || 'Sin traducción';
+    botonBocina.setAttribute('aria-label', `Escuchar: ${spanTraduccion.textContent}`);
     spanDefinicion.textContent = tarjeta.definicion || 'Sin definición disponible';
     editarPagina.href = `/index.html?id=${id}`;
     mostrarEjemplos(tarjeta.ejemplos_adicionales);
@@ -143,6 +145,10 @@ async function mostrarTarjeta() {
     mensaje.textContent = 'No se pudo conectar con el servidor';
   }
 }
+
+botonVolver.addEventListener('click', () => {
+  window.history.back();
+});
 
 botonBocina.addEventListener('click', () => {
   const texto = spanTraduccion.textContent.trim();

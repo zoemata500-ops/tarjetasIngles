@@ -6,6 +6,8 @@
   --turquesa: #3a9fc0;
   --naranja: #c0702a;
   --linea: #e6ebf2;
+  --azul-claro: rgb(142, 202, 230);
+  --azul: rgb(33, 158, 188);
 }
 :root {
   --icono-audio: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 9v6h4l5 4V5L8 9H4z'/%3E%3Cpath d='M16 8.5a5 5 0 010 7M18.5 6a8.5 8.5 0 010 12' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E");
@@ -60,13 +62,30 @@ body {
 
 .btn-volver {
   align-self: flex-start;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 40px;
   height: 40px;
   margin-bottom: 12px;
   border: 0;
-  background: none;
+  border-radius: 50%;
+  background: var(--tarjeta);
+  box-shadow: 0 3px 8px rgba(40, 60, 100, 0.15);
   cursor: pointer;
-  color: #aab4c3;
+  color: var(--azul);
+  transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn-volver:hover {
+  background: var(--azul-claro);
+  transform: translateY(-1px);
+  box-shadow: 0 5px 10px rgba(40, 60, 100, 0.18);
+}
+
+.btn-volver:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 5px rgba(40, 60, 100, 0.15);
 }
 .btn-volver svg {
   width: 24px;
@@ -100,6 +119,32 @@ body {
   margin-top: 8px;
   font-size: 0.95rem;
   color: var(--texto-suave);
+}
+
+#palabra {
+  display: block;
+  width: 75%;
+  max-width: 300px;
+  margin: 0 auto;
+  padding: 14px 20px;
+  border: 1px solid rgba(33, 158, 188, 0.4);
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 16px;
+  color: var(--azul);
+  background: var(--tarjeta);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#palabra::placeholder {
+  color: var(--texto-suave);
+  opacity: 0.8;
+}
+
+#palabra:focus {
+  outline: none;
+  border-color: var(--azul);
+  box-shadow: 0 0 0 3px rgba(33, 158, 188, 0.15);
 }
 
 .tarjeta__ingles {
@@ -176,6 +221,70 @@ body {
 }
 .btn-libro:hover,
 .btn-libro[aria-expanded="true"] { background: #eaf5fa; }
+
+/* ---------- Botones de acción ---------- */
+.btn-accion {
+  display: inline-block;
+  padding: 12px 28px;
+  border: 0;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: #fff;
+  text-decoration: none;
+  text-align: center;
+  background: linear-gradient(135deg, var(--azul-claro), var(--azul));
+  box-shadow: 0 4px 10px rgba(33, 158, 188, 0.35);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+}
+
+.btn-accion:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.06);
+  box-shadow: 0 6px 14px rgba(33, 158, 188, 0.4);
+}
+
+.btn-accion:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 6px rgba(33, 158, 188, 0.35);
+}
+
+.btn-accion:disabled {
+  opacity: 0.6;
+  cursor: default;
+  transform: none;
+}
+
+#buscar,
+#guardar {
+  margin-top: 14px;
+}
+
+.btn-editar {
+  padding: 4px 14px;
+  border: 0;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--azul);
+  background: var(--azul-claro);
+  box-shadow: 0 2px 6px rgba(33, 158, 188, 0.3);
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
+}
+
+.btn-editar:hover {
+  background: var(--azul);
+  color: #fff;
+}
+
+.btn-editar:active {
+  transform: scale(0.96);
+}
 
 /* ---------- Más ejemplos ---------- */
 .mas-ejemplos {
@@ -443,22 +552,23 @@ button:focus-visible {
   width: 44px;
   height: 44px;
   padding: 0;
-  border: 2px solid var(--turquesa);
+  border: 0;
   border-radius: 50%;
-  background: var(--tarjeta);
-  color: var(--turquesa);
+  background: linear-gradient(135deg, var(--azul-claro), var(--azul));
+  color: #fff;
   cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 4px 10px rgba(33, 158, 188, 0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
 }
 
 .btn-agregar-ejemplo:hover {
-  background: var(--turquesa);
-  color: #fff;
-  transform: scale(1.05);
+  transform: scale(1.06);
+  filter: brightness(1.06);
+  box-shadow: 0 6px 14px rgba(33, 158, 188, 0.4);
 }
 
 .btn-agregar-ejemplo:active {
-  transform: scale(0.95);
+  transform: scale(0.94);
 }
 
 .btn-agregar-ejemplo svg {
@@ -542,11 +652,13 @@ button:focus-visible {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.2s ease;
+  box-shadow: 0 2px 6px rgba(231, 76, 60, 0.3);
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .btn-eliminar-ejemplo:hover {
   background: #fdecea;
+  box-shadow: 0 3px 8px rgba(231, 76, 60, 0.35);
 }
 
 .btn-eliminar-ejemplo svg {

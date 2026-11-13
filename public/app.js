@@ -9,6 +9,7 @@ const inputUrlTarjetaResultado = document.getElementById('url-tarjeta');
 const botonCopiar = document.getElementById('copiar');
 const botonGuardar = document.getElementById('guardar');
 const enlaceAbrir = document.getElementById('abrir-tarjeta');
+const botonVolver = document.querySelector('.btn-volver');
 const botonAgregarEjemplo = document.getElementById('agregar-ejemplo');
 const listaEjemplosAdicionales = document.getElementById('lista-ejemplos-adicionales');
 
@@ -32,6 +33,10 @@ function obtenerClave() {
 
   return clave;
 }
+
+botonVolver.addEventListener('click', () => {
+  window.history.back();
+});
 
 botonBuscar.addEventListener('click', async () => {
   const palabra = campoPalabra.value.trim();

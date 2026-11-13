@@ -1,4 +1,19 @@
 const { Pool } = require('pg');
+const readline = require('readline');
+
+function confirmar(mensaje) {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+
+  return new Promise((resolve) => {
+    rl.question(mensaje, (respuesta) => {
+      rl.close();
+      resolve(respuesta.trim().toLowerCase());
+    });
+  });
+}
 
 if (!process.env.DATABASE_URL) {
   console.error('Falta DATABASE_URL en el archivo .env');
@@ -124,6 +139,20 @@ async function cargar() {
   const cliente = await pool.connect();
 
   try {
+    const { rows } = await cliente.query('SELECT COUNT(*) AS total FROM tarjetas');
+    const total = Number(rows[0].total);
+
+    if (total > 0) {
+      const respuesta = await confirmar(
+        `La tabla ya tiene ${total} tarjetas.\n¿Borrar todo y cargar las ${tarjetas.length} de ejemplo? (s/N): `
+      );
+
+      if (!['s', 'si', 'sí', 'y', 'yes'].includes(respuesta)) {
+        console.log('Cancelado. No se modificó nada.');
+        return;
+      }
+    }
+
     await cliente.query('BEGIN');
     await cliente.query('TRUNCATE tarjetas RESTART IDENTITY');
 

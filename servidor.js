@@ -2,14 +2,6 @@ const express = require('express');
 const { Pool } = require('pg');
 const path = require('path');
 
-const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-
-const app = express();
-app.use(express.json());
-const PORT = 3000;
-
-app.use(express.static(path.join(__dirname, 'public')));
-
 if (!process.env.DATABASE_URL) {
   console.error('Falta DATABASE_URL en el archivo .env');
   process.exit(1);
@@ -19,6 +11,14 @@ if (!process.env.CLAVE_EDICION) {
   console.error('Falta CLAVE_EDICION en el archivo .env');
   process.exit(1);
 }
+
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+
+const app = express();
+app.use(express.json());
+const PORT = process.env.PORT || 3000;
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 function requerirClave(req, res, next) {
   const clave = req.headers['x-clave'];
